@@ -48,19 +48,19 @@ choose() {
 }
 
 # Demander le nom du projet
-project_name=$(ask "Nom du projet")
-[ -z "$project_name" ] && echo "⚠️ Nom du projet requis !" && exit 1
+project_name=$(ask "Project name")
+[ -z "$project_name" ] && echo "⚠️ Project name required !" && exit 1
 
 # Choisir le type de projet
-project_type=$(choose "💡 Quel type de projet veux-tu créer ?" "HTML, CSS, JS" "Python" "Node.js" "Bash" "C" "C++" "Rust" "Quitter")
+project_type=$(choose "💡 What type of project do you want to create?" "HTML, CSS, JS" "Python" "Node.js" "Bash" "C" "C++" "Rust" "Exit")
 
 # Vérifier si l'utilisateur a choisi de quitter
-if [ "$project_type" == "Quitter" ]; then
-  echo "Annulation."
+if [ "$project_type" == "Exit" ]; then
+  echo "Cancelation."
   exit 0
 fi
 
-use_git=$(choose "🛠️ Utiliser Git" "Yes" "No")
+use_git=$(choose "🛠️ Use Git" "Yes" "No")
 
 # Créer le dossier du projet
 mkdir -p "$project_name"
@@ -70,7 +70,7 @@ $([ "$use_git" == "Yes" ] && git init --quiet)
 # Initialiser les fichiers selon le type de projet
 case $project_type in
 "HTML, CSS, JS")
-  use_tailwind=$(choose "🎨 Utiliser Tailwind CSS?" "Yes" "No")
+  use_tailwind=$(choose "🎨 Use Tailwind CSS?" "Yes" "No")
   echo "<!DOCTYPE html>
 <html>
 <head>
@@ -80,30 +80,30 @@ case $project_type in
     <script src='app.js'></script>
 </head>
 <body>
-    <h1>Bienvenue sur $project_name</h1>
+    <h1>Welcome on $project_name</h1>
 </body>
 </html>" >index.html
   echo 'console.log("QuickStart was here")' >app.js
   echo "body {color: red}" >styles.css
-  echo "🚀 Projet HTML créé dans $project_name/"
+  echo "🚀 HTML project created in $project_name/"
   ;;
 
 "Python")
   touch main.py
   echo "# $project_name" >README.md
   echo "print('Hello, $project_name!')" >main.py
-  echo "🚀 Projet Python créé dans $project_name/"
+  echo "🚀 Python project created in $project_name/"
   ;;
 
 "Node.js")
   npm init -y
-  use_eslint=$(choose "Utiliser ESLint?" "Yes" "No")
+  use_eslint=$(choose "Use ESLint?" "Yes" "No")
   if [ "$use_eslint" == "Yes" ]; then
     npm install eslint --save-dev
     npx eslint --init
   fi
   echo "console.log('Hello, $project_name!');" >index.js
-  echo "🚀 Projet Node.js créé dans $project_name/"
+  echo "🚀 Node.js project created in $project_name/"
   ;;
 
 "Bash")
@@ -111,7 +111,7 @@ case $project_type in
   chmod +x script.sh
   echo "#!/bin/bash" >script.sh
   echo 'echo "Hello, $project_name!"' >>script.sh
-  echo "🚀 Projet Bash créé dans $project_name/"
+  echo "🚀 Bash project created in $project_name/"
   ;;
 
 "C")
@@ -122,7 +122,7 @@ int main() {
     printf(\"Hello, $project_name!\\n\");
     return 0;
 }" >main.c
-  echo "🚀 Projet C créé dans $project_name/"
+  echo "🚀 C project created in $project_name/"
   ;;
 
 "C++")
@@ -133,17 +133,18 @@ int main() {
     std::cout << \"Hello, $project_name!\" << std::endl;
     return 0;
 }" >main.cpp
-  echo "🚀 Projet C++ créé dans $project_name/"
+  echo "🚀 C++ project created in $project_name/"
   ;;
 
 "Rust")
   if command -v cargo &>/dev/null; then
     cargo init --name "$project_name"
-    echo "🚀 Projet Rust créé avec Cargo dans $project_name/"
+    echo "🚀 Rust project created with Cargo in $project_name/"
   else
-    echo "❌ Cargo n'est pas installé. Installe-le avant de créer un projet Rust."
+    echo "❌ Cargo is not installed. Install it before creating a Rust project."
   fi
   ;;
 esac
 
-echo "🎉 Projet $project_name prêt sur $SYSTEM !"
+echo "🎉 $project_name ready in $project_name/ !"
+echo "This tool was created by squach90"
