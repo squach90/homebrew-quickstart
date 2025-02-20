@@ -34,4 +34,4 @@ brew update && brew upgrade quickstart
 Download the latest version from [GitHub Releases](https://github.com/squach90/homebrew-quickstart/releases) and replace the script.
 
 📜 License
-This project is under the MIT license.
+This project is under the MIT license. 
