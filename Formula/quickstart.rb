@@ -1,9 +1,9 @@
 class Quickstart < Formula
   desc "A CLI to quickly create HTML, Python, Node, etc. projects."
   homepage "https://github.com/squach90/homebrew-quickstart"
-  url "https://github.com/squach90/homebrew-quickstart/archive/refs/tags/v1.3.0.tar.gz"
-  sha256 "c7ebaa8576023ef377ffed9bcf458998fc9a55a3fa1255adbfaad94ed8187f1a"
-  version "1.3.0"
+  url "https://github.com/squach90/homebrew-quickstart/releases/tag/v1.4.0"
+  sha256 "306e0b111dee870da3206c2e9288d0d76c97a79d432a80fb433617d3c360e5ad"
+  version "1.4.0"
 
   def install
     bin.install "QuickStart.sh" => "quickstart"
