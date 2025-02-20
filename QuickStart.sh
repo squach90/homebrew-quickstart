@@ -52,7 +52,7 @@ project_name=$(ask "Nom du projet")
 [ -z "$project_name" ] && echo "⚠️ Nom du projet requis !" && exit 1
 
 # Choisir le type de projet
-project_type=$(choose "💡 Quel type de projet veux-tu créer ?" "HTML" "Python" "Node.js" "Bash" "C" "C++" "Rust" "Quitter")
+project_type=$(choose "💡 Quel type de projet veux-tu créer ?" "HTML, CSS, JS" "Python" "Node.js" "Bash" "C" "C++" "Rust" "Quitter")
 
 # Vérifier si l'utilisateur a choisi de quitter
 if [ "$project_type" == "Quitter" ]; then
@@ -69,18 +69,22 @@ $([ "$use_git" == "Yes" ] && git init --quiet)
 
 # Initialiser les fichiers selon le type de projet
 case $project_type in
-"HTML")
+"HTML, CSS, JS")
   use_tailwind=$(choose "🎨 Utiliser Tailwind CSS?" "Yes" "No")
   echo "<!DOCTYPE html>
 <html>
 <head>
     <title>$project_name</title>
     $([ "$use_tailwind" == "Yes" ] && echo '<script src="https://cdn.tailwindcss.com"></script>')
+    <link rel='stylesheet' href='styles.css'>
+    <script src='app.js'></script>
 </head>
 <body>
     <h1>Bienvenue sur $project_name</h1>
 </body>
 </html>" >index.html
+  echo 'console.log("QuickStart was here")' >app.js
+  echo "body {color: red}" >styles.css
   echo "🚀 Projet HTML créé dans $project_name/"
   ;;
 
