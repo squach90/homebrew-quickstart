@@ -1,4 +1,4 @@
-class QuickStart < Formula
+class Quickstart < Formula
   desc "Un CLI pour créer rapidement des projets HTML, Python, Node, etc."
   homepage "https://github.com/squach90/homebrew-quickstart"
   url "https://github.com/squach90/homebrew-quickstart/archive/refs/tags/v1.0.0.tar.gz"
