@@ -1,4 +1,4 @@
-# QuickStart (EN)
+# QuickStart
 🚀 A CLI to quickly create projects in HTML, Python, Node.js, Bash, and more!
 
 ## 📥 Installation
