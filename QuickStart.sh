@@ -16,8 +16,11 @@ else
   HAS_GUM=false
   echo "Install dependencies: Gum"
   brew install --quiet gum
-  exit
+  echo "Dependencies are being installed, please wait..."
+  exec "$0"
 fi
+
+clear
 
 # Fonction pour poser une question avec gum si dispo, sinon en ligne de commande
 ask() {
@@ -65,9 +68,8 @@ fi
 
 use_git=$(choose "🛠️ Use Git" "Yes" "No")
 
-# Créer le dossier du projet
 mkdir -p "$project_name"
-cd "$project_name" || exit 1
+
 $([ "$use_git" == "Yes" ] && git init --quiet)
 
 # Initialiser les fichiers selon le type de projet
@@ -150,4 +152,5 @@ int main() {
 esac
 
 echo "🎉 $project_name ready in $project_name/ !"
-echo "This tool was created by squach90"
+echo "🛠️ This tool was created by squach90"
+echo "👉 To enter your project directory, run: $(tput bold)cd $project_name$(tput sgr0)"
