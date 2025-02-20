@@ -68,7 +68,7 @@ fi
 
 use_git=$(choose "🛠️ Use Git" "Yes" "No")
 
-mkdir -p "$project_name"
+mkdir -p "$project_name" && cd "$project_name" || exit 1
 
 $([ "$use_git" == "Yes" ] && git init --quiet)
 
