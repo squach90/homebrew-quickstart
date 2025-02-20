@@ -4,8 +4,7 @@
 ## 📥 Installation
 With Homebrew (macOS & Linux)
 ```sh
-brew tap squach90/quickstart
-brew install quickstart
+brew install squach90/quickstart/quickstart
 ```
 Direct installation (Windows, macOS, Linux)
 ```sh
