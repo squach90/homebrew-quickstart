@@ -17,6 +17,7 @@ else
   HAS_GUM=false
   echo "Gum false"
   brew install --quiet gum
+  exit
 fi
 
 # Fonction pour poser une question avec gum si dispo, sinon en ligne de commande
