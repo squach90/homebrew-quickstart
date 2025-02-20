@@ -12,8 +12,11 @@ esac
 # Vérifier si gum est installé
 if command -v gum &>/dev/null; then
   HAS_GUM=true
+  echo "Gum True"
 else
   HAS_GUM=false
+  echo "Gum false"
+  brew install --quiet gum
 fi
 
 # Fonction pour poser une question avec gum si dispo, sinon en ligne de commande
