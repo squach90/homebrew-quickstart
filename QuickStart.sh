@@ -1,7 +1,5 @@
 #!/bin/bash
 
-#TODO: Mettre le choix entre npm pnpm et yarn via un menu
-
 # Détection du système
 OS=$(uname -s)
 case "$OS" in
@@ -135,17 +133,21 @@ case $project_type in
   ;;
 
 "Node.js")
-  use_pnpm=$(choose "Use PNPM ?" "Yes" "No")
-  if [ "$use_pnpm" == "Yes" ]; then
-    node_package_manager="pnpm"
-  elif [ "$use_pnpm" == "No" ]; then
+  node_package_manager_choice=$(choose "Which Package Manager would you use ?" "NPM" "PNPM" "Yarn")
+  if [ "$node_package_manager_choice" == "NPM" ]; then
     node_package_manager="npm"
+  elif [ "$node_package_manager_choice" == "PNPM" ]; then
+    node_package_manager="pnpm"
+  elif [ "$node_package_manager_choice" == "Yarn" ]; then
+    node_package_manager="yarn"
   fi
 
   if [ "$node_package_manager" == "npm" ]; then
     $node_package_manager init -y # Ajout de l'option -y pour l'initialisation avec npm
-  else
+  elif [ "$node_package_manager" == "pnpm" ]; then
     $node_package_manager init # Pas de -y avec pnpm, on laisse l'init sans options
+  else
+    $node_package_manager init -y # Utilisation de l'option -y pour Yarn aussi
   fi
 
   clear
@@ -160,17 +162,21 @@ case $project_type in
   ;;
 
 "Next.js")
-  use_pnpm=$(choose "Use PNPM ?" "Yes" "No")
-  if [ "$use_pnpm" == "Yes" ]; then
-    node_package_manager="pnpm"
-  elif [ "$use_pnpm" == "No" ]; then
+  node_package_manager_choice=$(choose "Which Package Manager would you use ?" "NPM" "PNPM" "Yarn")
+  if [ "$node_package_manager_choice" == "NPM" ]; then
     node_package_manager="npm"
+  elif [ "$node_package_manager_choice" == "PNPM" ]; then
+    node_package_manager="pnpm"
+  elif [ "$node_package_manager_choice" == "Yarn" ]; then
+    node_package_manager="yarn"
   fi
 
   if [ "$node_package_manager" == "npm" ]; then
     $node_package_manager init -y # Ajout de l'option -y pour l'initialisation avec npm
-  else
+  elif [ "$node_package_manager" == "pnpm" ]; then
     $node_package_manager init # Pas de -y avec pnpm, on laisse l'init sans options
+  else
+    $node_package_manager init -y # Utilisation de l'option -y pour Yarn aussi
   fi
 
   $node_package_manager install react react-dom next
@@ -335,7 +341,5 @@ print(\"Hello, $project_name!\")" >main.swift
   ;;
 esac
 
-echo "🛠️ This tool was created by squach90"
-echo "🚨 Did you find a bug? open a issue: https://github.com/squach90/homebrew-quickstart/issues"
 echo "📄 You can find Docs here: $(tput bold)$docs_link$(tput sgr0)"
 echo "👉 To enter your project directory, run: $(tput bold)cd $project_name_formated$(tput sgr0)"
