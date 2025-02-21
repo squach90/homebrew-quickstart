@@ -9,6 +9,14 @@ CYGWIN* | MINGW* | MSYS*) SYSTEM="Windows" ;;
 *) SYSTEM="Unknown" ;;
 esac
 
+# Vérifier si gum est installé
+if command -v gum &>/dev/null; then
+  HAS_GUM=true
+else
+  HAS_GUM=false
+  echo "Gum is not install"
+fi
+
 clear
 
 # Fonction pour poser une question avec gum si dispo, sinon en ligne de commande
