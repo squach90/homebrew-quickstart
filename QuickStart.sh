@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#TODO: Mettre la docs de chaque language
+#TODO: Mettre le choix entre npm pnpm et yarn via un menu
 
 # Détection du système
 OS=$(uname -s)
