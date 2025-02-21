@@ -9,17 +9,6 @@ CYGWIN* | MINGW* | MSYS*) SYSTEM="Windows" ;;
 *) SYSTEM="Unknown" ;;
 esac
 
-# Vérifier si gum est installé
-if command -v gum &>/dev/null; then
-  HAS_GUM=true
-else
-  HAS_GUM=false
-  echo "Install dependencies: Gum"
-  brew install --quiet gum
-  echo "Dependencies are being installed, please wait..."
-  exec "$0"
-fi
-
 clear
 
 # Fonction pour poser une question avec gum si dispo, sinon en ligne de commande
