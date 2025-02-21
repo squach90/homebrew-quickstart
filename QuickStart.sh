@@ -57,6 +57,12 @@ choose() {
 project_name=$(ask "Project name")
 [ -z "$project_name" ] && echo "⚠️ Project name required !" && exit 1
 
+project_name_formated=""
+
+if [[ "$project_name" =~ \ |\' ]]; then #  slightly more readable: if [[ "$string" =~ ( |\') ]]
+  project_name_formated="${project_name// /_}"
+fi
+
 # Choisir le type de projet
 project_type=$(choose "💡 What type of project do you want to create?" "HTML, CSS, JS" "Python" "Node.js" "Bash" "C" "C++" "Rust" "Exit")
 
@@ -68,7 +74,7 @@ fi
 
 use_git=$(choose "🛠️ Use Git" "Yes" "No")
 
-mkdir -p "$project_name" && cd "$project_name" || exit 1
+mkdir -p "$project_name_formated" && cd "$project_name_formated" || exit 1
 
 $([ "$use_git" == "Yes" ] && git init --quiet)
 
@@ -90,14 +96,14 @@ case $project_type in
 </html>" >index.html
   echo 'console.log("QuickStart was here")' >app.js
   echo "body {color: red}" >styles.css
-  echo "🚀 HTML project created in $project_name/"
+  echo "🚀 HTML project created in $project_name_formated/"
   ;;
 
 "Python")
   touch main.py
   echo "# $project_name" >README.md
   echo "print('Hello, $project_name!')" >main.py
-  echo "🚀 Python project created in $project_name/"
+  echo "🚀 Python project created in $project_name_formated/"
   ;;
 
 "Node.js")
@@ -108,7 +114,7 @@ case $project_type in
     npx eslint --init
   fi
   echo "console.log('Hello, $project_name!');" >index.js
-  echo "🚀 Node.js project created in $project_name/"
+  echo "🚀 Node.js project created in $project_name_formated/"
   ;;
 
 "Bash")
@@ -116,7 +122,7 @@ case $project_type in
   chmod +x script.sh
   echo "#!/bin/bash" >script.sh
   echo 'echo "Hello, $project_name!"' >>script.sh
-  echo "🚀 Bash project created in $project_name/"
+  echo "🚀 Bash project created in $project_name_formated/"
   ;;
 
 "C")
@@ -127,7 +133,7 @@ int main() {
     printf(\"Hello, $project_name!\\n\");
     return 0;
 }" >main.c
-  echo "🚀 C project created in $project_name/"
+  echo "🚀 C project created in $project_name_formated/"
   ;;
 
 "C++")
@@ -138,19 +144,19 @@ int main() {
     std::cout << \"Hello, $project_name!\" << std::endl;
     return 0;
 }" >main.cpp
-  echo "🚀 C++ project created in $project_name/"
+  echo "🚀 C++ project created in $project_name_formated/"
   ;;
 
 "Rust")
   if command -v cargo &>/dev/null; then
     cargo init --name "$project_name"
-    echo "🚀 Rust project created with Cargo in $project_name/"
+    echo "🚀 Rust project created with Cargo in $project_name_formated/"
   else
     echo "❌ Cargo is not installed. Install it before creating a Rust project."
   fi
   ;;
 esac
 
-echo "🎉 $project_name ready in $project_name/ !"
+echo "🎉 $project_name ready in $project_name_formated/ !"
 echo "🛠️ This tool was created by squach90"
-echo "👉 To enter your project directory, run: $(tput bold)cd $project_name$(tput sgr0)"
+echo "👉 To enter your project directory, run: $(tput bold)cd $project_name_formated$(tput sgr0)"
