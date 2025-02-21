@@ -32,5 +32,8 @@ brew update && brew upgrade quickstart
 #### Manually:
 Download the latest version from [GitHub Releases](https://github.com/squach90/homebrew-quickstart/releases) and replace the script.
 
+#### To-Do:
+- [ ] Create a Windows version
+
 📜 License
 This project is under the MIT license. 
