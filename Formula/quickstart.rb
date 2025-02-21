@@ -5,6 +5,8 @@ class Quickstart < Formula
   sha256 "63a748b4a4ba3953beb7e77e27ae8f53b3ed14a877ecd1bbe6263733af2e0561"
   version "1.4.5"
 
+  depends_on "gum"
+
   def install
     bin.install "QuickStart.sh" => "quickstart"
   end
