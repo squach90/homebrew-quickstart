@@ -1,5 +1,7 @@
 #!/bin/bash
 
+#TODO: mettre un systeme de groupe genre website, mobile app, desktop app
+
 # Détection du système
 OS=$(uname -s)
 case "$OS" in
@@ -14,7 +16,7 @@ if command -v gum &>/dev/null; then
   HAS_GUM=true
 else
   HAS_GUM=false
-  echo "Gum is not install"
+  echo "Gum is not install, please install Gum"
 fi
 
 clear
@@ -56,20 +58,46 @@ project_name=$(ask "Project name")
 
 project_name_formated=""
 
-if [[ "$project_name" =~ \ |\' ]]; then #  slightly more readable: if [[ "$string" =~ ( |\') ]]
-  project_name_formated="${project_name// /_}"
-fi
+while true; do
+  project_category=$(choose "📂 Select a project category:" "Website" "Mobile App" "Desktop App" "Other")
 
-# Choisir le type de projet
-project_type=$(choose "💡 What type of project do you want to create?" "HTML, CSS, JS" "Python" "Node.js" "Bash" "C" "C++" "Rust" "Exit")
+  while true; do
+    case $project_category in
+    "Website")
+      project_type=$(choose "💡 Choose your stack:" "HTML, CSS, JS" "Node.js" "Python" "Go Back" "Exit")
+      ;;
+    "Mobile App")
+      project_type=$(choose "📱 Choose your framework:" "React Native" "Flutter" "Swift" "Kotlin" "Go Back" "Exit")
+      ;;
+    "Desktop App")
+      project_type=$(choose "🖥️ Choose your stack:" "Electron.js" "Tauri" "Python (PyQt)" "C++ (Qt)" "Go Back" "Exit")
+      ;;
+    "Other")
+      project_type=$(choose "🛠️ Other options:" "Bash" "C" "C++" "Rust" "Go Back" "Exit")
+      ;;
+    esac
+
+    if [ "$project_type" == "Go Back" ]; then
+      break # Retour à la sélection de la catégorie
+    elif [ -n "$project_type" ]; then
+      break 2 # Sort complètement des boucles si un choix est validé
+    fi
+  done
+done
 
 # Vérifier si l'utilisateur a choisi de quitter
 if [ "$project_type" == "Exit" ]; then
-  echo "Cancelation."
+  echo "❌ Cancelation."
   exit 0
 fi
 
 use_git=$(choose "🛠️ Use Git" "Yes" "No")
+
+if [[ "$project_name" =~ \ |\' ]]; then #  slightly more readable: if [[ "$string" =~ ( |\') ]]
+  project_name_formated="${project_name// /_}"
+else
+  project_name_formated="$project_name"
+fi
 
 mkdir -p "$project_name_formated" && cd "$project_name_formated" || exit 1
 
@@ -151,6 +179,97 @@ int main() {
   else
     echo "❌ Cargo is not installed. Install it before creating a Rust project."
   fi
+  ;;
+"Electron.js")
+  mkdir -p "$project_name_formated" && cd "$project_name_formated" || exit 1
+  npm init -y
+  npm install electron --save-dev
+  echo "🚀 Electron.js project created in $project_name_formated/"
+  ;;
+
+"Tauri")
+  mkdir -p "$project_name_formated" && cd "$project_name_formated" || exit 1
+  npm init -y
+  npm install tauri --save-dev
+  echo "🚀 Tauri project created in $project_name_formated/"
+  ;;
+
+"Python (PyQt)")
+  mkdir -p "$project_name_formated" && cd "$project_name_formated" || exit 1
+  python3 -m venv venv
+  source venv/bin/activate
+  pip install pyqt5
+  touch main.py
+  echo "from PyQt5.QtWidgets import QApplication, QWidget
+
+app = QApplication([])
+window = QWidget()
+window.setWindowTitle('$project_name')
+window.show()
+app.exec_()" >main.py
+  echo "🚀 Python (PyQt) project created in $project_name_formated/"
+  ;;
+
+"C++ (Qt)")
+  mkdir -p "$project_name_formated" && cd "$project_name_formated" || exit 1
+  touch main.cpp
+  echo "#include <QApplication>
+#include <QWidget>
+
+int main(int argc, char *argv[]) {
+    QApplication app(argc, argv);
+    QWidget window;
+    window.setWindowTitle(\"$project_name\");
+    window.show();
+    return app.exec();
+}" >main.cpp
+  echo "🚀 C++ (Qt) project created in $project_name_formated/"
+  ;;
+"React Native")
+  if [ "$SYSTEM" == "macOS" ]; then
+    echo "🚀 Creating a React Native project for macOS"
+    npx react-native init "$project_name"
+  else
+    echo "🚨 React Native requires macOS for iOS development. You can create an Android project instead."
+    npx react-native init "$project_name" --template react-native-template-typescript
+  fi
+  echo "🚀 React Native project created in $project_name_formated/"
+  ;;
+
+"Flutter")
+  if command -v flutter &>/dev/null; then
+    flutter create "$project_name"
+    echo "🚀 Flutter project created in $project_name_formated/"
+  else
+    echo "❌ Flutter is not installed. Please install Flutter SDK first."
+  fi
+  ;;
+
+"Swift")
+  if [ "$SYSTEM" == "macOS" ]; then
+    mkdir -p "$project_name_formated" && cd "$project_name_formated" || exit 1
+    echo "import Foundation
+
+print(\"Hello, $project_name!\")" >main.swift
+    swiftc main.swift -o "$project_name"
+    echo "🚀 Swift project created in $project_name_formated/"
+  else
+    echo "❌ Swift can only be run on macOS."
+  fi
+  ;;
+
+"Kotlin")
+  mkdir -p "$project_name_formated" && cd "$project_name_formated" || exit 1
+  touch Main.kt
+  echo "fun main() {
+    println(\"Hello, $project_name!\")
+}" >Main.kt
+  echo "🚀 Kotlin project created in $project_name_formated/"
+  ;;
+
+*)
+  echo "❌ Unknown project type."
+  exit 1
   ;;
 esac
 
