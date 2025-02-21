@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#TODO: mettre un systeme de groupe genre website, mobile app, desktop app
+#TODO: Mettre la docs de chaque language
 
 # Détection du système
 OS=$(uname -s)
@@ -57,6 +57,7 @@ project_name=$(ask "Project name")
 [ -z "$project_name" ] && echo "⚠️ Project name required !" && exit 1
 
 project_name_formated=""
+docs_link=""
 
 while true; do
   project_category=$(choose "📂 Select a project category:" "Website" "Mobile App" "Desktop App" "Other")
@@ -64,7 +65,7 @@ while true; do
   while true; do
     case $project_category in
     "Website")
-      project_type=$(choose "💡 Choose your stack:" "HTML, CSS, JS" "Node.js" "Python" "Go Back" "Exit")
+      project_type=$(choose "💡 Choose your stack:" "HTML, CSS, JS" "Node.js" "Next.js" "Python" "Go Back" "Exit")
       ;;
     "Mobile App")
       project_type=$(choose "📱 Choose your framework:" "React Native" "Flutter" "Swift" "Kotlin" "Go Back" "Exit")
@@ -122,6 +123,7 @@ case $project_type in
   echo 'console.log("QuickStart was here")' >app.js
   echo "body {color: red}" >styles.css
   echo "🚀 HTML project created in $project_name_formated/"
+  docs_link="https://developer.mozilla.org/fr/docs/Web/HTML"
   ;;
 
 "Python")
@@ -129,17 +131,65 @@ case $project_type in
   echo "# $project_name" >README.md
   echo "print('Hello, $project_name!')" >main.py
   echo "🚀 Python project created in $project_name_formated/"
+  docs_link="https://docs.python.org/3/"
   ;;
 
 "Node.js")
-  npm init -y
-  use_eslint=$(choose "Use ESLint?" "Yes" "No")
+  use_pnpm=$(choose "Use PNPM ?" "Yes" "No")
+  if [ "$use_pnpm" == "Yes" ]; then
+    node_package_manager="pnpm"
+  elif [ "$use_pnpm" == "No" ]; then
+    node_package_manager="npm"
+  fi
+
+  if [ "$node_package_manager" == "npm" ]; then
+    $node_package_manager init -y # Ajout de l'option -y pour l'initialisation avec npm
+  else
+    $node_package_manager init # Pas de -y avec pnpm, on laisse l'init sans options
+  fi
+
+  clear
+  use_eslint=$(choose "Use ESLint ?" "Yes" "No")
   if [ "$use_eslint" == "Yes" ]; then
-    npm install eslint --save-dev
-    npx eslint --init
+    $node_package_manager install eslint --save-dev
+    $node_package_manager eslint --init
   fi
   echo "console.log('Hello, $project_name!');" >index.js
   echo "🚀 Node.js project created in $project_name_formated/"
+  docs_link="https://nodejs.org/docs/latest/api/"
+  ;;
+
+"Next.js")
+  use_pnpm=$(choose "Use PNPM ?" "Yes" "No")
+  if [ "$use_pnpm" == "Yes" ]; then
+    node_package_manager="pnpm"
+  elif [ "$use_pnpm" == "No" ]; then
+    node_package_manager="npm"
+  fi
+
+  if [ "$node_package_manager" == "npm" ]; then
+    $node_package_manager init -y # Ajout de l'option -y pour l'initialisation avec npm
+  else
+    $node_package_manager init # Pas de -y avec pnpm, on laisse l'init sans options
+  fi
+
+  $node_package_manager install react react-dom next
+  clear
+  echo "{
+    \"scripts\": {
+      \"dev\": \"next dev\",
+      \"build\": \"next build\",
+      \"start\": \"next start\"
+    }
+  }" >package.json
+  mkdir pages
+  echo "import React from 'react';
+  
+  export default function Home() {
+    return <h1>Welcome to $project_name with Next.js!</h1>;
+  }" >pages/index.js
+  echo "🚀 Next.js project created in $project_name_formated/"
+  docs_link="https://nextjs.org/docs"
   ;;
 
 "Bash")
@@ -148,6 +198,7 @@ case $project_type in
   echo "#!/bin/bash" >script.sh
   echo 'echo "Hello, $project_name!"' >>script.sh
   echo "🚀 Bash project created in $project_name_formated/"
+  docs_link="https://www.gnu.org/savannah-checkouts/gnu/bash/manual/bash.html"
   ;;
 
 "C")
@@ -159,6 +210,7 @@ int main() {
     return 0;
 }" >main.c
   echo "🚀 C project created in $project_name_formated/"
+  docs_link="https://devdocs.io/c/"
   ;;
 
 "C++")
@@ -170,12 +222,14 @@ int main() {
     return 0;
 }" >main.cpp
   echo "🚀 C++ project created in $project_name_formated/"
+  docs_link="https://devdocs.io/cpp/"
   ;;
 
 "Rust")
   if command -v cargo &>/dev/null; then
     cargo init --name "$project_name"
     echo "🚀 Rust project created with Cargo in $project_name_formated/"
+    docs_link="https://doc.rust-lang.org/beta/"
   else
     echo "❌ Cargo is not installed. Install it before creating a Rust project."
   fi
@@ -185,6 +239,7 @@ int main() {
   npm init -y
   npm install electron --save-dev
   echo "🚀 Electron.js project created in $project_name_formated/"
+  docs_link="https://www.electronjs.org/fr/docs/latest/"
   ;;
 
 "Tauri")
@@ -192,6 +247,7 @@ int main() {
   npm init -y
   npm install tauri --save-dev
   echo "🚀 Tauri project created in $project_name_formated/"
+  docs_link="https://v1.tauri.app/fr/v1/guides/"
   ;;
 
 "Python (PyQt)")
@@ -208,6 +264,7 @@ window.setWindowTitle('$project_name')
 window.show()
 app.exec_()" >main.py
   echo "🚀 Python (PyQt) project created in $project_name_formated/"
+  docs_link="https://docs.python.org/3/"
   ;;
 
 "C++ (Qt)")
@@ -224,6 +281,7 @@ int main(int argc, char *argv[]) {
     return app.exec();
 }" >main.cpp
   echo "🚀 C++ (Qt) project created in $project_name_formated/"
+  docs_link="https://devdocs.io/cpp/"
   ;;
 "React Native")
   if [ "$SYSTEM" == "macOS" ]; then
@@ -234,12 +292,14 @@ int main(int argc, char *argv[]) {
     npx react-native init "$project_name" --template react-native-template-typescript
   fi
   echo "🚀 React Native project created in $project_name_formated/"
+  docs_link="https://reactnative.dev/docs/getting-started"
   ;;
 
 "Flutter")
   if command -v flutter &>/dev/null; then
     flutter create "$project_name"
     echo "🚀 Flutter project created in $project_name_formated/"
+    docs_link="https://docs.flutter.dev/"
   else
     echo "❌ Flutter is not installed. Please install Flutter SDK first."
   fi
@@ -253,6 +313,7 @@ int main(int argc, char *argv[]) {
 print(\"Hello, $project_name!\")" >main.swift
     swiftc main.swift -o "$project_name"
     echo "🚀 Swift project created in $project_name_formated/"
+    docs_link="https://www.swift.org/documentation/"
   else
     echo "❌ Swift can only be run on macOS."
   fi
@@ -265,6 +326,7 @@ print(\"Hello, $project_name!\")" >main.swift
     println(\"Hello, $project_name!\")
 }" >Main.kt
   echo "🚀 Kotlin project created in $project_name_formated/"
+  docs_link="https://kotlinlang.org/docs/home.html"
   ;;
 
 *)
@@ -273,6 +335,7 @@ print(\"Hello, $project_name!\")" >main.swift
   ;;
 esac
 
-echo "🎉 $project_name ready in $project_name_formated/ !"
 echo "🛠️ This tool was created by squach90"
+echo "🚨 Did you find a bug? open a issue: https://github.com/squach90/homebrew-quickstart/issues"
+echo "📄 You can find Docs here: $(tput bold)$docs_link$(tput sgr0)"
 echo "👉 To enter your project directory, run: $(tput bold)cd $project_name_formated$(tput sgr0)"
