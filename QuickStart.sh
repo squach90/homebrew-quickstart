@@ -290,12 +290,25 @@ int main(int argc, char *argv[]) {
   docs_link="https://devdocs.io/cpp/"
   ;;
 "React Native")
+  node_package_manager_choice=$(choose "Which Package Manager would you use ?" "NPM" "PNPM" "Yarn")
+  if [ "$node_package_manager_choice" == "NPM" ]; then
+    node_package_manager="npm"
+  elif [ "$node_package_manager_choice" == "PNPM" ]; then
+    node_package_manager="pnpm"
+  elif [ "$node_package_manager_choice" == "Yarn" ]; then
+    node_package_manager="yarn"
+  fi
+
   if [ "$SYSTEM" == "macOS" ]; then
     echo "🚀 Creating a React Native project for macOS"
-    npx react-native init "$project_name"
+    if [ "$node_package_manager" == "pnpm" ]; then
+      pnpm dlx @react-native-community/cli init "$project_name"
+    else
+      npx @react-native-community/cli init "$project_name"
+    fi
   else
     echo "🚨 React Native requires macOS for iOS development. You can create an Android project instead."
-    npx react-native init "$project_name" --template react-native-template-typescript
+    npx @react-native-community/cli init "$project_name" --template react-native-template-typescript
   fi
   echo "🚀 React Native project created in $project_name_formated/"
   docs_link="https://reactnative.dev/docs/getting-started"
